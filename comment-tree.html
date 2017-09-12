@@ -1,0 +1,65 @@
+﻿<div ng-controller="commentTree">
+    <div class="row show-center">
+        <div class="col-sm-12" ng-model="myForm" ng-show="!$ctrl.parentCommentId">
+            <form name="formAddComment">
+                <div class="form-group">
+                    <textarea ng-if="$ctrl.comments" ng-model="$ctrl.data.comment" class="form-control comment" rows="5" placeholder="Add your comment, {{$ctrl.signedIn.firstName}}"></textarea>
+                    <textarea ng-if="!$ctrl.comments" ng-model="$ctrl.data.comment" class="form-control comment" rows="5" placeholder="Start the discussion, {{$ctrl.signedIn.firstName}}"></textarea>
+                </div>
+                <button type="submit" ng-if="$ctrl.signedIn" class="btn btn-theme-bg btn-sm" ng-click="$ctrl.btnSubmit()">Submit Comment</button>
+                <button type="button" ng-if="!$ctrl.signedIn" class="btn btn-theme-bg btn-sm" uib-popover="You must be logged in" popover-trigger="'outsideClick'">Submit Comment</button>
+                <button type="reset" class="btn border-black btn-sm">Clear</button>
+            </form>
+            <br />
+            <button ng-if="$ctrl.comments" type="button" class="btn btn-theme-dark btn-lg" ng-click="$ctrl.showCommentsButton()">Show {{$ctrl.comments.length}} comment<span ng-if="$ctrl.comments.length > 1">s</span></button>
+        </div>
+    </div>
+    <!--End of Add Comment Form div-->
+    <div ng-if="!$ctrl.showComments">
+        <div ng-repeat="reply in $ctrl.comments" ng-controller="replyTree as vm" class="col-sm-12 no-padding">
+            <div class="row comment comment-space">
+                <div class="avatar-left">
+                    <user-avatar user-id="reply.userId" include-follow-button="false" show-name="false"></user-avatar>
+                </div>
+                <div class="comment-box comment-header">
+                    <span>
+                        <span class="light-text">{{reply.dateCreated | formatDateWithTime}}</span>
+                        <span class="right">
+                            <i class="fa fa-lg fa-pencil-square-o" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && reply.dateDeactivated == null" ng-click="vm.editMode(reply)"></i>
+                            <i class="fa fa-lg fa-times" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && reply.dateDeactivated == null" ng-click="vm.btnDelete(reply.id, $index)"></i>
+                        </span>
+                    </span>
+                </div>
+                <div class="comment-body comment-box">
+                    <p>{{reply.comment}}</p>
+                    <form name="formReplyComment" ng-if="vm.activeForm">
+                        <div class="form-group">
+                            <textarea ng-model="vm.data.comment" class="form-control comment" rows="5" placeholder="Add your reply to {{reply.userName}}'s comment"></textarea>
+                        </div>
+                        <button type="submit" ng-if="$ctrl.signedIn" class="btn btn-theme-bg btn-sm" ng-click="vm.btnRplySubmit(vm.data, reply, reply.children)">Submit Comment</button>
+                        <button type="button" ng-if="!$ctrl.signedIn" class="btn btn-theme-bg btn-sm" uib-popover="You must be logged in" popover-trigger="'outsideClick'">Submit Comment</button>
+                        <button type="reset" class="btn border-black btn-sm">Clear</button>
+                    </form>
+                    <div ng-show="!vm.activeReplyBox">
+                        <i class="fa fa-reply replyIcon" ng-if="reply.comment != 'Comment Deleted'" aria-hidden="true" ng-click="vm.activeForm = true; vm.activeReplyBox = true"></i>
+                        <button class="btn btn-theme-dark btn-xs" ng-click="vm.btnViewrply()" ng-show="reply.children.length >= 1">View {{reply.children.length}} <span ng-if="reply.children.length > 1">replies</span><span ng-if="reply.children.length == 1">reply</span></button>
+                    </div>
+                </div>
+                <div class="reply-pad" ng-if="vm.viewReplies">
+                    <comment-tree comments="reply.children" content-item-id="$ctrl.contentItemId" parent-comment-id="reply.id"></comment-tree>
+                </div>
+            </div>
+        </div>
+        <!---------------Begin Modal---------------->
+        <script type="text/ng-template" id="deleteCommentModal.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete comment?</h3>
+            </div>
+            <div class="modal-footer">
+                <input type="button" ng-click="btnRemove()" class="btn btn-theme-bg btn-sm" value="Delete" />
+                <input type="button" ng-click="btnCancel()" class="btn btn-theme-dark" value="Cancel" />
+            </div>
+        </script>
+        <!---------------End Modal---------------->
+    </div>
+</div>
