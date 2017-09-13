@@ -1,36 +1,53 @@
 ﻿(function () {
     "use strict";
 
-    var app = angular.module("BlakWealth");
-
-    app.component("commentTree", {
-        templateUrl: "comment-tree/comment-tree.html",
-        controller: "commentTree",
-        bindings: {
-            contentItemId: '<',
-            comments: '<',
-            parentCommentId: '<'
-        }
-    });
-
-    app.filter('reverse', function () {
-        return function (items) {
-            if (items) {
-                return items.slice().reverse();
+    angular
+        .module('BlakWealth')
+        .component("commentTree", {
+            templateUrl: "comment-tree/comment-tree.html",
+            controller: "commentTree",
+            bindings: {
+                contentItemId: '<',
+                comments: '<',
+                parentCommentId: '<'
             }
-        };
-    });
+        });
+})();
 
-    app.factory("commentService", commentService);
-    commentService.$inject = ["$http", "$q"];
+(function () {
+    "use strict";
 
-    function commentService($http, $q) {
-        return {
+    angular
+        .module('BlakWealth')
+        .filter('reverse', function () {
+            return function (items) {
+                if (items) {
+                    return items.slice().reverse();
+                }
+            };
+        });
+})();
+
+(function () {
+    "use strict";
+
+    angular
+        .module('BlakWealth')
+        .factory('commentFactory', commentFactory);
+
+    commentFactory.$inject = ['$http', '$q'];
+
+    function commentFactory($http, $q) {
+        var service = {
             loadComments: _getComments
             , createComment: _postComment
             , deleteComment: _deleteComment
             , updateComment: _updateComment
         };
+
+        return service;
+
+        ////////////
 
         function _getComments(contentItemId) {
             var settings = {
@@ -118,6 +135,6 @@
 
         function _updateError(error) {
             return $q.reject(error.data.message);
-        }     
+        }
     }
 })();
