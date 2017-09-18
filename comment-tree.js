@@ -33,11 +33,11 @@
 
     angular
         .module('BlakWealth')
-        .factory('commentFactory', commentFactory);
+        .factory('commentService', commentService);
 
-    commentFactory.$inject = ['$http', '$q'];
+    commentService.$inject = ['$http', '$q'];
 
-    function commentFactory($http, $q) {
+    function commentService($http, $q) {
         var service = {
             loadComments: _getComments
             , createComment: _postComment
