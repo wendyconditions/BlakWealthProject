@@ -1,6 +1,6 @@
 ﻿<div ng-controller="commentTree">
     <div class="row show-center">
-        <div class="col-sm-12" ng-model="myForm" ng-show="!$ctrl.parentCommentId">
+        <div class="col-sm-12" ng-show="!$ctrl.parentCommentId">
             <form name="formAddComment">
                 <div class="form-group">
                     <textarea ng-if="$ctrl.comments" ng-model="$ctrl.data.comment" class="form-control comment" rows="5" placeholder="Add your comment, {{$ctrl.signedIn.firstName}}"></textarea>
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <!---------------Begin Modal---------------->
+        <!--Begin Modal-->
         <script type="text/ng-template" id="deleteCommentModal.html">
             <div class="modal-header">
                 <h3 class="modal-title">Delete comment?</h3>
@@ -60,6 +60,6 @@
                 <input type="button" ng-click="btnCancel()" class="btn btn-theme-dark" value="Cancel" />
             </div>
         </script>
-        <!---------------End Modal---------------->
+        <!--End Modal-->
     </div>
 </div>
