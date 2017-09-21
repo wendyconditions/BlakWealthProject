@@ -75,7 +75,6 @@
                         comment.userName = "Anonymous";
                         comment.userProfilePicture = "#defaulImg";
                     }
-
                     allCommentIndex[comment.id] = comment;
                 }
 
