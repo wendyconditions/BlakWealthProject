@@ -17,7 +17,7 @@ namespace Sabio.Services
 
     public class CommentGroupService : ICommentGroupService
     {
-        //delcaring/instaniating dataprovider
+        //declaring dataprovider
         private IDataProvider _dataProvider;
         readonly INotificationService notificationService;
 
@@ -50,7 +50,6 @@ namespace Sabio.Services
                     singleItem.DateDeactivated = reader.GetSafeDateTimeNullable(startingIndex++);
                     singleItem.UserName = reader.GetSafeString(startingIndex++);
                     singleItem.UserProfilePicture = reader.GetSafeString(startingIndex++);
-
 
                     //not going to create list if there's no data / lazy load / if statement
                     if (list == null)
@@ -85,21 +84,20 @@ namespace Sabio.Services
                    Int32.TryParse(param["@Id"].Value.ToString(), out Id);
                }
                );
-
-            notificationService.ProcessNotificationsForComment(new Notification_CreateNotificationRequest
-            {
-                CommentId = Id,
-                CommentText = model.Comment,
-                SourceUserId = model.UserId,
-                Type = "comment"
-            });
+            // Comment notification service not set up yet, wip
+            //notificationService.ProcessNotificationsForComment(new Notification_CreateNotificationRequest
+            //{
+            //    CommentId = Id,
+            //    CommentText = model.Comment,
+            //    SourceUserId = model.UserId,
+            //    Type = "comment"
+            //});
 
             return Id;
         }
 
         public void Update(CommentGroupBase model)
         {
-
             _dataProvider.ExecuteNonQuery("dbo.CommentGroup_Update"
                , inputParamMapper: delegate (SqlParameterCollection paramCollection)
                {
@@ -108,7 +106,6 @@ namespace Sabio.Services
                    paramCollection.AddWithValue("@ParentCommentId", model.ParentCommentId);
                    paramCollection.AddWithValue("@UserId", model.UserId);
                    paramCollection.AddWithValue("@Id", model.Id);
-
                });
         }
 
@@ -140,7 +137,6 @@ namespace Sabio.Services
                    singleItem.ContentItemId = reader.GetSafeInt32(startingIndex++);
                    singleItem.ParentCommentId = reader.GetSafeInt32(startingIndex++);
                    singleItem.UserId = reader.GetSafeInt32(startingIndex++);
-
                }
                );
             return singleItem;

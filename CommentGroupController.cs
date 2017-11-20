@@ -37,13 +37,11 @@ namespace Sabio.Web.Controllers.Api
                 Response.Items = commentGroupService.GetAll(ContentItemId);
                 return Request.CreateResponse(HttpStatusCode.OK, Response);
             }
-
             catch (Exception exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exception);
             }
         }
-
 
         [Route(), HttpPost]
         public HttpResponseMessage Insert(CommentGroupBase model)
@@ -76,13 +74,10 @@ namespace Sabio.Web.Controllers.Api
                 commentGroupService.Update(model);
                 return Request.CreateResponse(HttpStatusCode.OK, model);
             }
-
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
-
-
         }
 
         [Route("{id:int}"), HttpDelete]
@@ -90,7 +85,6 @@ namespace Sabio.Web.Controllers.Api
         {
             commentGroupService.Delete(Id);
             return Request.CreateResponse(HttpStatusCode.OK, true);
-
         }
 
         [Route("{id:int}"), HttpGet]
@@ -98,9 +92,7 @@ namespace Sabio.Web.Controllers.Api
         public HttpResponseMessage GetById(int Id)
         {
             ItemResponse<CommentGroupBase> response = new ItemResponse<CommentGroupBase>();
-
             response.Item = commentGroupService.GetById(Id);
-
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
     }
