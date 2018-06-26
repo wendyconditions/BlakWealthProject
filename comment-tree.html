@@ -1,4 +1,5 @@
 ﻿<div ng-controller="commentTree">
+    <!-- Add comment form-->
     <div class="row show-center">
         <div class="col-sm-12" ng-show="!$ctrl.parentCommentId">
             <form name="formAddComment">
@@ -14,7 +15,7 @@
             <button ng-if="$ctrl.comments" type="button" class="btn btn-theme-dark btn-lg" ng-click="$ctrl.showCommentsButton()">Show {{$ctrl.comments.length}} comment<span ng-if="$ctrl.comments.length > 1">s</span></button>
         </div>
     </div>
-    <!--End of Add Comment Form div-->
+    <!--End Add comment form-->
     <div ng-if="!$ctrl.showComments">
         <div ng-repeat="reply in $ctrl.comments" ng-controller="replyTree as vm" class="col-sm-12 no-padding">
             <div class="row comment comment-space">
@@ -25,8 +26,8 @@
                     <span>
                         <span class="light-text">{{reply.dateCreated | formatDateWithTime}}</span>
                         <span class="right">
-                            <i class="fa fa-lg fa-pencil-square-o" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && reply.dateDeactivated == null" ng-click="vm.editMode(reply)"></i>
-                            <i class="fa fa-lg fa-times" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && reply.dateDeactivated == null" ng-click="vm.btnDelete(reply.id, $index)"></i>
+                            <i class="fa fa-lg fa-pencil-square-o" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && !reply.dateDeactivated" ng-click="vm.editMode(reply)"></i>
+                            <i class="fa fa-lg fa-times" aria-hidden="true" ng-if="$ctrl.signedIn.id === reply.userId && !reply.dateDeactivated" ng-click="vm.btnDelete(reply.id, $index)"></i>
                         </span>
                     </span>
                 </div>

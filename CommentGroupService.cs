@@ -14,10 +14,9 @@ using System.Threading.Tasks;
 
 namespace Sabio.Services
 {
-
     public class CommentGroupService : ICommentGroupService
     {
-        //declaring dataprovider
+        // Declaring dataprovider
         private IDataProvider _dataProvider;
         readonly INotificationService notificationService;
 
@@ -51,7 +50,7 @@ namespace Sabio.Services
                     singleItem.UserName = reader.GetSafeString(startingIndex++);
                     singleItem.UserProfilePicture = reader.GetSafeString(startingIndex++);
 
-                    //not going to create list if there's no data / lazy load / if statement
+                    //not going to create list if there's no data / lazy load
                     if (list == null)
                     {
                         list = new List<CommentGroupBase>();
@@ -73,17 +72,13 @@ namespace Sabio.Services
                    paramCollection.AddWithValue("@ContentItemId", model.ContentItemId);
                    paramCollection.AddWithValue("@ParentCommentId", model.ParentCommentId);
                    paramCollection.AddWithValue("@UserId", model.UserId);
-
                    SqlParameter idParameter = new SqlParameter("@Id", System.Data.SqlDbType.Int);
                    idParameter.Direction = System.Data.ParameterDirection.Output;
-
                    paramCollection.Add(idParameter);
-
                }, returnParameters: delegate (SqlParameterCollection param)
                {
                    Int32.TryParse(param["@Id"].Value.ToString(), out Id);
-               }
-               );
+               });
             // Comment notification service not set up yet, wip
             //notificationService.ProcessNotificationsForComment(new Notification_CreateNotificationRequest
             //{
@@ -92,7 +87,6 @@ namespace Sabio.Services
             //    SourceUserId = model.UserId,
             //    Type = "comment"
             //});
-
             return Id;
         }
 
@@ -131,14 +125,12 @@ namespace Sabio.Services
                {
                    singleItem = new CommentGroupBase();
                    int startingIndex = 0; //startingOrdinal
-
                    singleItem.Id = reader.GetSafeInt32(startingIndex++);
                    singleItem.Comment = reader.GetSafeString(startingIndex++);
                    singleItem.ContentItemId = reader.GetSafeInt32(startingIndex++);
                    singleItem.ParentCommentId = reader.GetSafeInt32(startingIndex++);
                    singleItem.UserId = reader.GetSafeInt32(startingIndex++);
-               }
-               );
+               });
             return singleItem;
         }
     }

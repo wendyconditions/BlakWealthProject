@@ -19,20 +19,6 @@
 
     angular
         .module('BlakWealth')
-        .filter('reverse', function () {
-            return function (items) {
-                if (items) {
-                    return items.slice().reverse();
-                }
-            };
-        });
-})();
-
-(function () {
-    "use strict";
-
-    angular
-        .module('BlakWealth')
         .factory('commentService', commentService);
 
     commentService.$inject = ['$http', '$q'];
@@ -63,9 +49,13 @@
             var allCommentIndex = {};
             var topLevelComments = [];
 
+            // If no comments for content, set to null, return
             if (!allComments) {
                 topLevelComments = null;
             } else {
+                // Add empty children array to each object
+                // Find deleted comments and set default values
+                // Set new modified objects to a new object allCommentIndex
                 for (var i = 0; i < allComments.length; i++) {
                     var comment = allComments[i];
                     comment.children = [];
@@ -78,6 +68,7 @@
                     allCommentIndex[comment.id] = comment;
                 }
 
+                // Check if first level comments have any children(replies)
                 for (var key in allCommentIndex) {
                     var comments = allCommentIndex[key];
                     if (!comments.parentCommentId) {

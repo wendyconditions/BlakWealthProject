@@ -11,13 +11,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-
 namespace Sabio.Web.Controllers.Api
-
 {
     [RoutePrefix("api/comments")]
     public class CommentGroupController : ApiController
     {
+        // Inject service interfaces
         readonly ICommentGroupService commentGroupService;
         readonly IAuthenticationService authService;
 
@@ -27,7 +26,7 @@ namespace Sabio.Web.Controllers.Api
             this.authService = authService;
         }
 
-        [Route("contentitemid/{ContentItemId:int}"), HttpGet]
+        [Route("contentItemId/{ContentItemId:int}"), HttpGet]
         public HttpResponseMessage GetAll(int ContentItemId)
         {
             try
