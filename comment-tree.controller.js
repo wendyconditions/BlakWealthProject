@@ -19,6 +19,16 @@
 
         //////////////
 
+        function _init() {
+            userService.getInfo().then(_getInfoSuccess);
+
+            if (!c.comments) {
+                _getComments(c.contentId);
+            } else {
+                c.showComments = false;
+            }
+        }
+        
         function showCommentsButton() {
             if (c.showComments === false) {
                 c.showComments = true;
@@ -36,16 +46,6 @@
                 commentService.comments(c.contentItemId).then(_commentsLoadSuccess, _commentsLoadError);
             } else {
                 commentService.comments(data).then(_commentsLoadSuccess, _commentsLoadError);
-            }
-        }
-
-        function _init() {
-            userService.getInfo().then(_getInfoSuccess);
-
-            if (!c.comments) {
-                _getComments(c.contentId);
-            } else {
-                c.showComments = false;
             }
         }
 
