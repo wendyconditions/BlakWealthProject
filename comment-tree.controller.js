@@ -43,9 +43,9 @@
 
         function _getComments(data) {
             if (!data) {
-                commentService.comments(c.contentItemId).then(_commentsLoadSuccess, _commentsLoadError);
+                commentService.comments(c.contentItemId).then(_commentsLoadSuccess, _genericError);
             } else {
-                commentService.comments(data).then(_commentsLoadSuccess, _commentsLoadError);
+                commentService.comments(data).then(_commentsLoadSuccess, _genericError);
             }
         }
 
@@ -61,24 +61,18 @@
             c.comments = data;
         }
 
-        function _commentsLoadError(error) {
-            if (error) {
-                alertService.error("Error loading comments, please try again later");
-            }
+        function _genericError(error) {
+            alertService.error("Error loading comments, please try again later.", "ERROR");
         }
 
         function btnSubmit() {
             c.data.contentItemId = c.contentItemId;
-            commentService.create(c.data).then(_createSuccess, _createError);
+            commentService.create(c.data).then(_createSuccess, _genericError);
         }
 
         function _createSuccess() {
-            commentService.comments(c.contentItemId).then(_commentsLoadSuccess, _commentsLoadError);
+            commentService.comments(c.contentItemId).then(_commentsLoadSuccess, _genericError);
             c.data = null;
-        }
-
-        function _createError() {
-            alertService.error("An error occurred while trying to post a comment. Please try again.", "NETWORK ERROR OCCURRED");
         }
     }
 
@@ -90,9 +84,9 @@
     angular.module("BlakWealth")
         .controller("replyTree", replyTree);
 
-    replyTree.$inject = ['commentService', '$scope', 'alertService', 'avatarService', '$uibModal'];
+    replyTree.$inject = ['commentService', '$scope', 'alertService', '$uibModal'];
 
-    function replyTree(commentService, $scope, alertService, avatarService, $uibModal) {
+    function replyTree(commentService, $scope, alertService, $uibModal) {
         var vm = this;
         vm.data = null;
         vm.btnRplySubmit = btnRplySubmit;
@@ -108,8 +102,7 @@
         ////////////
 
         function _deleteSuccess(data) {
-            data = null;
-            $scope.$emit('replyComments', data);
+            $scope.$emit('replyComments', null);
         }
 
         function editMode(reply) {
@@ -137,7 +130,7 @@
                 commentService.update(vm.data).then(function () {
                     $scope.$emit('replyComments', data.contentItemId);
                     alertService.success("Successfully updated your comment");
-                }, _updateError);
+                }, _genericError);
             } else {
                 data.contentItemId = reply.contentItemId;
                 data.parentCommentId = reply.id;
@@ -145,24 +138,16 @@
                     data.children = [];
                     children.push(data);
                     $scope.$emit('replyComments', data.contentItemId);
-                }, _createError);
+                }, _genericError);
             }
         }
 
-        function _updateError(error) {
-            alertService.error("An error occured while updating your comment. Please try again", "NETWORK ERROR OCCURRED");
-        }
-
-        function _createError(error) {
-            alertService.error("An error occurred, please try again", "NETWORK ERROR OCCURRED");
+        function _genericError(error) {
+            alertService.error("An error occured while updating your comment. Please try again", "ERROR");
         }
 
         function _commentsLoadSuccess(data) {
             vm.comments = data;
-        }
-
-        function _commentsLoadError(error) {
-            alertService.error("An error occurred, please try again", "NETWORK ERROR OCCURRED");
         }
 
         function _deleteCommentModal(id, index) {
