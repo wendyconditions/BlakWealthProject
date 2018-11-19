@@ -41,7 +41,7 @@
                 , url: "/api/comments/contentItemId/" + contentItemId
             };
             return $http(settings)
-                .then(_getCommentSuccess, _getCommentError);
+                .then(_getCommentSuccess, _commentServiceError);
         }
 
         function _getCommentSuccess(response) {
@@ -82,22 +82,13 @@
             return topLevelComments;
         }
 
-        function _getCommentError(error) {
-            return $q.reject(error.data.message);
-        }
-
         function _postComment(commentData) {
             var settings = {
                 method: "POST"
                 , url: "/api/comments/"
                 , data: commentData
             };
-            return $http(settings)
-                .then(null, _postCommentError);
-        }
-
-        function _postCommentError(error) {
-            return $q.reject(error);
+            return $http(settings);
         }
 
         function _deleteComment(commentId) {
@@ -105,26 +96,20 @@
                 method: "DELETE"
                 , url: "/api/comments/" + commentId
             };
-            return $http(settings)
-                .then(null, _deleteError);
+            return $http(settings);
         }
-
-        function _deleteError(error) {
-            return $q.reject(error.data.message);
-        }
-
+        
         function _updateComment(commentData) {
             var settings = {
                 method: "PUT"
                 , url: "/api/comments/" + commentData.id
                 , data: commentData
             };
-            return $http(settings)
-                .then(null, _updateError);
+            return $http(settings);
         }
-
-        function _updateError(error) {
-            return $q.reject(error.data.message);
+        
+        function _commentServiceError(error) {
+            return $q.reject(error);
         }
     }
 })();
